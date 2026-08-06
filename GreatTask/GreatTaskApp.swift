@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct GreatTaskApp: App {
+    
+    @State var coordinator = AppCoordinator(
+        authService: AuthServiceImpl(),
+        dataService: DataServiceImpl()
+    )
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView(coordinator: coordinator)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  RootView.swift
 //  GreatTask
 //
 //  Created by Danylo Litvinchuk on 06.08.2026.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct RootView: View {
+    @Bindable var coordinator: AppCoordinator
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +22,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+//    RootView()
 }
