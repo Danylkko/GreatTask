@@ -40,6 +40,10 @@ final class AppCoordinator {
             self?.authState = .signedIn
         }
     }
+    
+    func makeServersListViewModel() -> ServersListViewModel {
+        ServersListViewModel(dataService: dataService)
+    }
 
     func signOut() {
         authService.signOut()
@@ -51,7 +55,7 @@ final class AppCoordinator {
     func view(for route: Route) -> some View {
         switch route {
         case .list:
-            Text("Signed in")
+            ServersListView(viewModel: makeServersListViewModel())
         }
     }
 }
