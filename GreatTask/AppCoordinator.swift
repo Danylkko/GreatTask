@@ -8,14 +8,20 @@
 import SwiftUI
 
 enum Route: Hashable {
-    case loading
     case list
+}
+
+enum AuthState {
+    case checking
+    case signedOut
+    case signedIn
 }
 
 @MainActor
 @Observable
 final class AppCoordinator {
     var path = NavigationPath()
+    var authState: AuthState = .signedOut
     private var servers: [ServerModel] = []
     
     private let authService: AuthServiceProtocol
@@ -28,9 +34,24 @@ final class AppCoordinator {
         self.authService = authService
         self.dataService = dataService
     }
+    
+    func makeSignInViewModel() -> SignInViewModel {
+        SignInViewModel(authService: authService) { [weak self] in
+            self?.authState = .signedIn
+        }
+    }
+
+    func signOut() {
+        authService.signOut()
+        path = NavigationPath()
+        authState = .signedOut
+    }
 
     @ViewBuilder
     func view(for route: Route) -> some View {
-        
+        switch route {
+        case .list:
+            Text("Signed in")
+        }
     }
 }

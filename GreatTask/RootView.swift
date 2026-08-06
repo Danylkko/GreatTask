@@ -11,13 +11,24 @@ struct RootView: View {
     @Bindable var coordinator: AppCoordinator
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        switch coordinator.authState {
+        case .checking:
+            ProgressView()
+        case .signedOut:
+            NavigationStack(path: $coordinator.path) {
+                SignInView(viewModel: coordinator.makeSignInViewModel())
+                    .navigationDestination(for: Route.self) { route in
+                        coordinator.view(for: route)
+                    }
+            }
+        case .signedIn:
+            NavigationStack(path: $coordinator.path) {
+                coordinator.view(for: .list)
+                    .navigationDestination(for: Route.self) { route in
+                        coordinator.view(for: route)
+                    }
+            }
         }
-        .padding()
     }
 }
 
