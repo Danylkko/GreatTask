@@ -12,10 +12,17 @@ struct GreatTaskApp: App {
     
     @State var coordinator: AppCoordinator = {
         let tokenStorage = KeychainTokenStorage()
-        
-        let authService = AuthServiceImpl(tokenStorage: tokenStorage)
-        let dataService = DataServiceImpl()
-        
+        let networkService = NetworkServiceImpl(
+            baseURL: URL(string: "https://playground.nordsec.com/v1")!,
+            tokenStorage: tokenStorage
+        )
+
+        let authService = AuthServiceImpl(
+            networkService: networkService,
+            tokenStorage: tokenStorage
+        )
+        let dataService = DataServiceImpl(networkService: networkService)
+
         return AppCoordinator(
             authService: authService,
             dataService: dataService

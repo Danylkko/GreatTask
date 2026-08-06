@@ -9,9 +9,14 @@ import Foundation
 
 final class AuthServiceImpl: AuthServiceProtocol {
 
+    private let networkService: NetworkServiceProtocol
     private let tokenStorage: TokenStorageProtocol
 
-    init(tokenStorage: TokenStorageProtocol) {
+    init(
+        networkService: NetworkServiceProtocol,
+        tokenStorage: TokenStorageProtocol
+    ) {
+        self.networkService = networkService
         self.tokenStorage = tokenStorage
     }
 
@@ -22,8 +27,20 @@ final class AuthServiceImpl: AuthServiceProtocol {
         guard !username.isEmpty, !password.isEmpty else {
             throw AuthError.invalidCredentials
         }
-        
-        fatalError("\(#function) not implemented")
+
+        let body = try JSONEncoder().encode(LoginRequest(username: username, password: password))
+        let endpoint = Endpoint(
+            path: "tokens",
+            method: .post,
+            headers: ["Content-Type": "application/json"],
+            body: body,
+            requiresAuth: false
+        )
+
+        let response: LoginResponse = try await networkService.request(endpoint)
+        let token = AuthToken(token: response.token)
+        tokenStorage.save(token)
+        return token
     }
 
     func currentToken() -> AuthToken? {
@@ -33,4 +50,13 @@ final class AuthServiceImpl: AuthServiceProtocol {
     func signOut() {
         tokenStorage.clear()
     }
+}
+
+private struct LoginRequest: Encodable {
+    let username: String
+    let password: String
+}
+
+private struct LoginResponse: Decodable {
+    let token: String
 }
