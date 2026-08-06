@@ -17,6 +17,11 @@ struct SignInView: View {
     
     var body: some View {
         VStack {
+            Image(.testioLogo)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 51)
+            
             TextField(text: $viewModel.username) {
                 Text("username")
             }
