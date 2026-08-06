@@ -36,6 +36,7 @@ struct GreatTaskApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(coordinator: coordinator)
+                .preferredColorScheme(.light)
         }
     }
 }
