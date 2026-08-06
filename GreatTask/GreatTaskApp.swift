@@ -11,9 +11,13 @@ import SwiftUI
 struct GreatTaskApp: App {
     
     @State var coordinator: AppCoordinator = {
+        guard let baseURL = InfoPlistStorage.shared.apiBaseURL else {
+            fatalError("Missing API_SCHEME/API_HOST in Info.plist")
+        }
+        
         let tokenStorage = KeychainTokenStorage()
         let networkService = NetworkServiceImpl(
-            baseURL: URL(string: "https://playground.nordsec.com/v1")!,
+            baseURL: baseURL,
             tokenStorage: tokenStorage
         )
 

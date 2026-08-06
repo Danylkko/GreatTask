@@ -11,9 +11,23 @@ final class InfoPlistStorage {
     
     static let shared = InfoPlistStorage()
     
-    @InfoPlistValues(key: .apiKey)
-    var apiKey: String?
+    @InfoPlistValues(key: .apiScheme)
+    var apiScheme: String?
     
+    @InfoPlistValues(key: .apiHost)
+    var apiHost: String?
+    
+    @InfoPlistValues(key: .apiVersion)
+    var apiVersion: String?
+    
+    var apiBaseURL: URL? {
+        guard let apiScheme, let apiHost else { return nil }
+        var components = URLComponents()
+        components.scheme = apiScheme
+        components.host = apiHost
+        components.path = apiVersion.map { "/\($0)" } ?? ""
+        return components.url
+    }
 }
 
 @propertyWrapper
@@ -32,5 +46,7 @@ struct InfoPlistValues<T> {
 }
 
 enum InfoPlistKeys: String {
-    case apiKey = "API_KEY"
+    case apiScheme = "API_SCHEME"
+    case apiHost = "API_HOST"
+    case apiVersion = "API_VERSION"
 }

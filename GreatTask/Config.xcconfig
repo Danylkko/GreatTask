@@ -1,0 +1,13 @@
+//
+//  Config.xcconfig
+//  GreatTask
+//
+//  Created by Danylo Litvinchuk on 06.08.2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+API_SCHEME=https
+API_HOST=playground.nordsec.com
+API_VERSION=v1

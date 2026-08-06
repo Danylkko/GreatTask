@@ -2,9 +2,6 @@
 # Finder metadata
 .DS_Store
 
-# Secrets
-Secrets.xcconfig
-
 # Thumbnails
 ._*
 

@@ -141,7 +141,7 @@
 		79F2154F3024C902005695CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 79F215483024C902005695CA /* GreatTask */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -207,7 +207,7 @@
 		79F215503024C902005695CA /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 79F215483024C902005695CA /* GreatTask */;
-			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
