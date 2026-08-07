@@ -35,19 +35,18 @@ final class SignInViewModel {
     private(set) var signInTask: Task<Void, Never>?
 
     private let authService: AuthServiceProtocol
-    private let onSignedIn: () -> Void
+    private weak var coordinator: SignInCoordinatorProtocol?
 
     init(
         authService: AuthServiceProtocol,
-        rememberedCredentials: Credentials? = nil,
         initialErrorMessage: String? = nil,
-        onSignedIn: @escaping () -> Void
+        coordinator: SignInCoordinatorProtocol
     ) {
         self.authService = authService
-        self.onSignedIn = onSignedIn
+        self.coordinator = coordinator
         self.errorMessage = initialErrorMessage
-
-        if let rememberedCredentials {
+        
+        if let rememberedCredentials = authService.rememberedCredentials() {
             username = rememberedCredentials.username
             password = rememberedCredentials.password
             rememberMe = true
@@ -66,7 +65,7 @@ final class SignInViewModel {
                     password: password,
                     rememberMe: rememberMe
                 )
-                onSignedIn()
+                coordinator?.didSignIn()
             } catch {
                 invalidFields = [.username, .password]
                 errorMessage = error.localizedDescription

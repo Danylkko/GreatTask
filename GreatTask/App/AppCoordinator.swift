@@ -56,11 +56,9 @@ final class AppCoordinator {
     func makeSignInViewModel() -> SignInViewModel {
         SignInViewModel(
             authService: authService,
-            rememberedCredentials: authService.rememberedCredentials(),
-            initialErrorMessage: restoreErrorMessage
-        ) { [weak self] in
-            self?.authState = .signedIn
-        }
+            initialErrorMessage: restoreErrorMessage,
+            coordinator: self
+        )
     }
     
     func makeServersListViewModel() -> ServersListViewModel {
@@ -84,5 +82,11 @@ final class AppCoordinator {
         case .list:
             ServersListView(viewModel: makeServersListViewModel())
         }
+    }
+}
+
+extension AppCoordinator: SignInCoordinatorProtocol {
+    func didSignIn() {
+        authState = .signedIn
     }
 }
