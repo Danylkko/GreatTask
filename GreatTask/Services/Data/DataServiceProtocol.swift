@@ -8,7 +8,9 @@
 import Foundation
 
 protocol DataServiceProtocol {
+    func cachedServers() async -> [ServerModel]
     func fetchServers() async throws -> [ServerModel]
+    func clearCachedServers() async
 }
 
 struct ServerModel: Codable {

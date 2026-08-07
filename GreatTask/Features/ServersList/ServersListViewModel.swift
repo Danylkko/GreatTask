@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
 final class ServersListViewModel {
 
@@ -22,6 +23,7 @@ final class ServersListViewModel {
 
     var servers: [ServerModel] = []
     var isLoading = true
+    var isRefreshing = false
     var errorMessage: String?
     var sortField: SortField = .name
     var sortOrder: SortOrder = .ascending
@@ -42,25 +44,38 @@ final class ServersListViewModel {
         }
     }
 
-    private var dataService: DataServiceProtocol
-    
+    private let dataService: DataServiceProtocol
+    private var loadTask: Task<Void, Never>?
+
     init(dataService: DataServiceProtocol) {
         self.dataService = dataService
     }
 
-    func fetchServers() {
-        errorMessage = nil
-        isLoading = true
+    func loadServers() {
+        guard loadTask == nil else { return }
 
-        Task {
+        loadTask = Task {
+            defer { loadTask = nil }
+
+            if servers.isEmpty {
+                let cached = await dataService.cachedServers()
+                if !cached.isEmpty {
+                    servers = cached
+                    isLoading = false
+                }
+            }
+            
+            errorMessage = nil
+            isRefreshing = !servers.isEmpty
+            
             do {
-                try await Task.sleep(nanoseconds: 2_000_000_000) // TODO: remove
                 servers = try await dataService.fetchServers()
             } catch {
                 errorMessage = error.localizedDescription
             }
             
             isLoading = false
+            isRefreshing = false
         }
     }
 

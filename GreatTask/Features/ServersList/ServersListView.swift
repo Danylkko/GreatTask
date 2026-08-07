@@ -24,7 +24,7 @@ struct ServersListView: View {
             }
         }
         .onAppear {
-            viewModel.fetchServers()
+            viewModel.loadServers()
         }
     }
 
@@ -44,7 +44,7 @@ struct ServersListView: View {
             header
             Divider()
 
-            if let errorMessage = viewModel.errorMessage {
+            if let errorMessage = viewModel.errorMessage, viewModel.servers.isEmpty {
                 Spacer()
                 Text(errorMessage)
                     .font(.footnote)
@@ -53,6 +53,11 @@ struct ServersListView: View {
                     .padding()
                 Spacer()
             } else {
+                if let errorMessage = viewModel.errorMessage {
+                    staleBanner(errorMessage)
+                    Divider()
+                }
+
                 ScrollView {
                     LazyVStack(spacing: 0) {
                         ForEach(Array(viewModel.sortedServers.enumerated()), id: \.offset) { _, server in
@@ -70,10 +75,27 @@ struct ServersListView: View {
         HStack(spacing: 0) {
             sortButton(title: "SERVER", field: .name, alignment: .leading)
             sortButton(title: "DISTANCE", field: .distance, alignment: .leading)
+
+            if viewModel.isRefreshing {
+                ProgressView()
+                    .controlSize(.small)
+                    .transition(.opacity)
+            }
         }
+        .animation(.default, value: viewModel.isRefreshing)
         .padding(.horizontal, 24)
         .padding(.vertical, 8)
         .background(Color(.grayscaleLight))
+    }
+    
+    private func staleBanner(_ message: String) -> some View {
+        Text(message)
+            .font(.caption)
+            .foregroundStyle(.red)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 6)
+            .background(Color.red.opacity(0.08))
     }
 
     private func sortButton(

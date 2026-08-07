@@ -25,7 +25,11 @@ struct GreatTaskApp: App {
             networkService: networkService,
             tokenStorage: tokenStorage
         )
-        let dataService = DataServiceImpl(networkService: networkService)
+        let serversCache = ServersCacheImpl(modelContainer: .serversCache())
+        let dataService = DataServiceImpl(
+            networkService: networkService,
+            cache: serversCache
+        )
 
         return AppCoordinator(
             authService: authService,
