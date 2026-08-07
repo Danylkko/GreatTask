@@ -16,6 +16,30 @@ struct ServersListView: View {
     @State var viewModel: ServersListViewModel
 
     var body: some View {
+        Group {
+            if viewModel.isLoading {
+                loadingView
+            } else {
+                content
+            }
+        }
+        .onAppear {
+            Task { await viewModel.fetchServers() }
+        }
+    }
+
+    private var loadingView: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+                .controlSize(.regular)
+            Text("LOADING LIST")
+                .font(.caption)
+                .foregroundStyle(Color(.primaryLightInactive))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var content: some View {
         VStack(spacing: 0) {
             header
             Divider()
@@ -40,9 +64,6 @@ struct ServersListView: View {
                 }
             }
         }
-        .onAppear {
-            Task { await viewModel.fetchServers() }
-        }
     }
 
     private var header: some View {
@@ -52,6 +73,7 @@ struct ServersListView: View {
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 8)
+        .background(Color(.grayscaleLight))
     }
 
     private func sortButton(

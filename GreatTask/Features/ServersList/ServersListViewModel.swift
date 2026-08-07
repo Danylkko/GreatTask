@@ -21,6 +21,7 @@ final class ServersListViewModel {
     }
 
     var servers: [ServerModel] = []
+    var isLoading = true
     var errorMessage: String?
     var sortField: SortField = .name
     var sortOrder: SortOrder = .ascending
@@ -49,8 +50,11 @@ final class ServersListViewModel {
 
     func fetchServers() async {
         errorMessage = nil
+        isLoading = true
+        defer { isLoading = false }
 
         do {
+            try await Task.sleep(nanoseconds: 5_000_000_000)
             servers = try await dataService.fetchServers()
         } catch {
             errorMessage = error.localizedDescription
