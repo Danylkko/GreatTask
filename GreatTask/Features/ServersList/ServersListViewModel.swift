@@ -21,12 +21,12 @@ final class ServersListViewModel {
         case descending
     }
 
-    var servers: [ServerModel] = []
-    var isLoading = true
-    var isRefreshing = false
-    var errorMessage: String?
-    var sortField: SortField = .name
-    var sortOrder: SortOrder = .ascending
+    private var servers: [ServerModel] = []
+    private(set) var isLoading = true
+    private(set) var isRefreshing = false
+    private(set) var errorMessage: String?
+    private(set) var sortField: SortField = .name
+    private(set) var sortOrder: SortOrder = .ascending
 
     var sortedServers: [ServerModel] {
         let ascending = sortOrder == .ascending
@@ -45,7 +45,7 @@ final class ServersListViewModel {
     }
 
     private let dataService: DataServiceProtocol
-    private var loadTask: Task<Void, Never>?
+    private(set) var loadTask: Task<Void, Never>?
 
     init(dataService: DataServiceProtocol) {
         self.dataService = dataService

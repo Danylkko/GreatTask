@@ -44,7 +44,7 @@ struct ServersListView: View {
             header
             Divider()
 
-            if let errorMessage = viewModel.errorMessage, viewModel.servers.isEmpty {
+            if let errorMessage = viewModel.errorMessage, viewModel.sortedServers.isEmpty {
                 Spacer()
                 Text(errorMessage)
                     .font(.footnote)

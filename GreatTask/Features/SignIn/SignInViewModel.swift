@@ -28,9 +28,11 @@ final class SignInViewModel {
     }
     
     var rememberMe = false
-    var isLoading = false
+    private(set) var isLoading = false
     private(set) var errorMessage: String?
     private(set) var invalidFields: Set<InputField> = []
+
+    private(set) var signInTask: Task<Void, Never>?
 
     private let authService: AuthServiceProtocol
     private let onSignedIn: () -> Void
@@ -57,7 +59,7 @@ final class SignInViewModel {
         isLoading = true
         invalidFields.removeAll()
         
-        Task {
+        signInTask = Task {
             do {
                 _ = try await authService.signIn(
                     username: username,

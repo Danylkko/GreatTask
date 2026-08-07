@@ -22,6 +22,7 @@ enum AuthState {
 final class AppCoordinator {
     var path = NavigationPath()
     var authState: AuthState = .checking
+    private(set) var signOutTask: Task<Void, Never>?
     private var servers: [ServerModel] = []
     private var restoreErrorMessage: String?
     
@@ -72,7 +73,7 @@ final class AppCoordinator {
         restoreErrorMessage = nil
         authState = .signedOut
         
-        Task {
+        signOutTask = Task {
             await dataService.clearCachedServers()
         }
     }
