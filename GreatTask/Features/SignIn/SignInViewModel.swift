@@ -9,11 +9,27 @@ import SwiftUI
 
 @Observable
 final class SignInViewModel {
+    
+    enum InputField {
+        case username
+        case password
+    }
 
-    var username = ""
-    var password = ""
+    var username = "" {
+        didSet {
+            if username != oldValue { invalidFields.remove(.username) }
+        }
+    }
+    
+    var password = "" {
+        didSet {
+            if password != oldValue { invalidFields.remove(.password) }
+        }
+    }
+    
     var isLoading = false
-    var errorMessage: String?
+    private(set) var errorMessage: String?
+    private(set) var invalidFields: Set<InputField> = []
 
     private let authService: AuthServiceProtocol
     private let onSignedIn: () -> Void
@@ -26,16 +42,25 @@ final class SignInViewModel {
         self.onSignedIn = onSignedIn
     }
     
-    func signIn() async {
+    func signIn() {
         errorMessage = nil
         isLoading = true
-        defer { isLoading = false }
-
-        do {
-            _ = try await authService.signIn(username: username, password: password)
-            onSignedIn()
-        } catch {
-            errorMessage = error.localizedDescription
+        invalidFields.removeAll()
+        
+        Task {
+            do {
+                _ = try await authService.signIn(username: username, password: password)
+                onSignedIn()
+            } catch {
+                invalidFields = [.username, .password]
+                errorMessage = error.localizedDescription
+            }
+            
+            isLoading = false
         }
+    }
+    
+    func isFieldInvalid(_ field: InputField) -> Bool {
+        invalidFields.contains(field)
     }
 }

@@ -14,18 +14,15 @@ struct SignInView: View {
         static let horizontalPadding: CGFloat = 24
 
         static let paneMinWidth: CGFloat = stackWidth + horizontalPadding * 2
-        static let logoSize = CGSize(width: 200, height: 51)
-        static let logoBottomSpacing: CGFloat = 40
-        static let fieldsSpacing: CGFloat = 8
-        static let buttonTopSpacing: CGFloat = 16
-        
+
         static let wallpaperPaneSize = CGSize(width: 379, height: 437)
         static let wallpaperPhotoSize = CGSize(width: 724, height: 481)
         static let wallpaperPhotoOffset = CGPoint(x: -117, y: 0)
     }
 
     @State private var viewModel: SignInViewModel
-    
+    @ScaledMetric(relativeTo: .footnote) private var errorSlotHeight: CGFloat = 26
+
     init(viewModel: SignInViewModel) {
         self.viewModel = viewModel
     }
@@ -38,7 +35,6 @@ struct SignInView: View {
 
             wallpaper
         }
-        // Keeps the window minimum in place should either pane ever become flexible.
         .frame(minWidth: Constants.paneMinWidth * 2)
     }
 
@@ -47,29 +43,23 @@ struct SignInView: View {
             Image(.testioLogo)
                 .resizable()
                 .scaledToFit()
-                .frame(width: Constants.logoSize.width, height: Constants.logoSize.height)
+                .frame(width: 200, height: 51)
 
             TextField(text: $viewModel.username) {
-                Text("username")
+                Text("Username")
             }
             .disableAutocorrection(true)
-            .padding(.top, Constants.logoBottomSpacing)
+            .borderedField(isInvalid: viewModel.isFieldInvalid(.username))
+            .padding(.top, 40)
 
             SecureField(text: $viewModel.password) {
-                Text("password")
+                Text("Password")
             }
-            .padding(.top, Constants.fieldsSpacing)
-
-            if let errorMessage = viewModel.errorMessage {
-                Text(errorMessage)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, Constants.fieldsSpacing)
-            }
+            .borderedField(isInvalid: viewModel.isFieldInvalid(.password))
+            .padding(.top, 8)
 
             Button {
-                Task { await viewModel.signIn() }
+                viewModel.signIn()
             } label: {
                 if viewModel.isLoading {
                     ProgressView()
@@ -80,7 +70,15 @@ struct SignInView: View {
             }
             .disabled(viewModel.isLoading)
             .frame(maxWidth: .infinity)
-            .padding(.top, Constants.buttonTopSpacing)
+            .padding(.top, 16)
+            
+            Text(viewModel.errorMessage ?? "")
+                .foregroundStyle(.red)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .font(.footnote)
+                .frame(height: errorSlotHeight, alignment: .bottom)
+                .padding(.top, 8)
         }
     }
 
