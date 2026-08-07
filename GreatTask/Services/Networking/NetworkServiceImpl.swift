@@ -55,7 +55,7 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
         var headers = endpoint.headers
         if endpoint.requiresAuth {
             guard let token = tokenStorage.loadToken() else {
-                throw NetworkError.unauthorized
+                throw NetworkError.missingCredentials
             }
             headers["Authorization"] = "Bearer \(token.token)"
         }
@@ -69,17 +69,33 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
         let response: URLResponse
         do {
             (data, response) = try await session.data(for: request)
-        } catch {
+        } catch let error as URLError {
             throw NetworkError.transport(error)
+        } catch {
+            throw NetworkError.unknown(error)
         }
 
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
         }
-        guard (200..<300).contains(httpResponse.statusCode) else {
-            throw NetworkError.httpStatus(httpResponse.statusCode)
-        }
 
-        return (data, httpResponse)
+        let body = data.isEmpty ? nil : data
+        switch httpResponse.statusCode {
+        case 200..<300:
+            return (data, httpResponse)
+        case 401:
+            throw NetworkError.unauthorized(body: body)
+        case 403:
+            throw NetworkError.forbidden(body: body)
+        case 404:
+            throw NetworkError.notFound(body: body)
+        case 400..<500:
+            throw NetworkError.clientError(code: httpResponse.statusCode, body: body)
+        case 500..<600:
+            throw NetworkError.serverError(code: httpResponse.statusCode, body: body)
+        default:
+            throw NetworkError.unexpectedStatus(code: httpResponse.statusCode, body: body)
+        }
     }
+    
 }

@@ -18,12 +18,15 @@ struct AuthToken: Equatable {
 }
 
 enum AuthError: LocalizedError {
+    case emptyCredentials
     case invalidCredentials
 
     var errorDescription: String? {
         switch self {
-        case .invalidCredentials:
+        case .emptyCredentials:
             return "Enter a username and password."
+        case .invalidCredentials:
+            return "Login or password is wrong."
         }
     }
 }

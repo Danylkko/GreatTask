@@ -25,7 +25,7 @@ final class AuthServiceImpl: AuthServiceProtocol {
         password: String
     ) async throws -> AuthToken {
         guard !username.isEmpty, !password.isEmpty else {
-            throw AuthError.invalidCredentials
+            throw AuthError.emptyCredentials
         }
 
         let body = try JSONEncoder().encode(LoginRequest(username: username, password: password))
@@ -37,7 +37,13 @@ final class AuthServiceImpl: AuthServiceProtocol {
             requiresAuth: false
         )
 
-        let response: LoginResponse = try await networkService.request(endpoint)
+        let response: LoginResponse
+        do {
+            response = try await networkService.request(endpoint)
+        } catch NetworkError.unauthorized {
+            throw AuthError.invalidCredentials
+        }
+
         let token = AuthToken(token: response.token)
         tokenStorage.save(token)
         return token
