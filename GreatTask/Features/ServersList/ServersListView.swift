@@ -24,7 +24,7 @@ struct ServersListView: View {
             }
         }
         .onAppear {
-            Task { await viewModel.fetchServers() }
+            viewModel.fetchServers()
         }
     }
 

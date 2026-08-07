@@ -48,16 +48,19 @@ final class ServersListViewModel {
         self.dataService = dataService
     }
 
-    func fetchServers() async {
+    func fetchServers() {
         errorMessage = nil
         isLoading = true
-        defer { isLoading = false }
 
-        do {
-            try await Task.sleep(nanoseconds: 5_000_000_000)
-            servers = try await dataService.fetchServers()
-        } catch {
-            errorMessage = error.localizedDescription
+        Task {
+            do {
+                try await Task.sleep(nanoseconds: 2_000_000_000) // TODO: remove
+                servers = try await dataService.fetchServers()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            
+            isLoading = false
         }
     }
 
