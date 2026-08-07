@@ -37,6 +37,30 @@ struct GreatTaskApp: App {
         WindowGroup {
             RootView(coordinator: coordinator)
                 .preferredColorScheme(.light)
+                .navigationTitle("testio.")
+                .toolbar(removing: .title)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("testio.")
+                            .font(.body.bold())
+                    }
+                    .sharedBackgroundVisibility(.hidden)
+
+                    if coordinator.authState == .signedIn {
+                        ToolbarSpacer(.flexible)
+
+                        ToolbarItem {
+                            Button {
+                                coordinator.signOut()
+                            } label: {
+                                Image(.signoutIcon)
+                            }
+                            .labelStyle(.iconOnly)
+                            .help("Log out")
+                        }
+                        .sharedBackgroundVisibility(.hidden)
+                    }
+                }
         }
     }
 }
