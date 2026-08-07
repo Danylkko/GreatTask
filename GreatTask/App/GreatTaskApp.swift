@@ -16,6 +16,7 @@ struct GreatTaskApp: App {
         }
         
         let tokenStorage = KeychainTokenStorage()
+        let credentialsStorage = KeychainCredentialsStorage()
         let networkService = NetworkServiceImpl(
             baseURL: baseURL,
             tokenStorage: tokenStorage
@@ -23,7 +24,8 @@ struct GreatTaskApp: App {
 
         let authService = AuthServiceImpl(
             networkService: networkService,
-            tokenStorage: tokenStorage
+            tokenStorage: tokenStorage,
+            credentialsStorage: credentialsStorage
         )
         let serversCache = ServersCacheImpl(modelContainer: .serversCache())
         let dataService = DataServiceImpl(

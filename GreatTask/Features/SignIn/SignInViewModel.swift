@@ -27,6 +27,7 @@ final class SignInViewModel {
         }
     }
     
+    var rememberMe = false
     var isLoading = false
     private(set) var errorMessage: String?
     private(set) var invalidFields: Set<InputField> = []
@@ -36,10 +37,19 @@ final class SignInViewModel {
 
     init(
         authService: AuthServiceProtocol,
+        rememberedCredentials: Credentials? = nil,
+        initialErrorMessage: String? = nil,
         onSignedIn: @escaping () -> Void
     ) {
         self.authService = authService
         self.onSignedIn = onSignedIn
+        self.errorMessage = initialErrorMessage
+
+        if let rememberedCredentials {
+            username = rememberedCredentials.username
+            password = rememberedCredentials.password
+            rememberMe = true
+        }
     }
     
     func signIn() {
@@ -49,7 +59,11 @@ final class SignInViewModel {
         
         Task {
             do {
-                _ = try await authService.signIn(username: username, password: password)
+                _ = try await authService.signIn(
+                    username: username,
+                    password: password,
+                    rememberMe: rememberMe
+                )
                 onSignedIn()
             } catch {
                 invalidFields = [.username, .password]

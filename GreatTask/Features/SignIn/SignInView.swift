@@ -58,6 +58,14 @@ struct SignInView: View {
             .borderedField(isInvalid: viewModel.isFieldInvalid(.password))
             .padding(.top, 8)
 
+            Toggle(isOn: $viewModel.rememberMe) {
+                Text("Remember me")
+                    .font(.footnote)
+            }
+            .toggleStyle(.checkbox)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 12)
+
             Button {
                 viewModel.signIn()
             } label: {

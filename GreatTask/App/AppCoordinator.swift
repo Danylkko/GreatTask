@@ -21,8 +21,9 @@ enum AuthState {
 @Observable
 final class AppCoordinator {
     var path = NavigationPath()
-    var authState: AuthState = .signedOut
+    var authState: AuthState = .checking
     private var servers: [ServerModel] = []
+    private var restoreErrorMessage: String?
     
     private let authService: AuthServiceProtocol
     private let dataService: DataServiceProtocol
@@ -35,8 +36,28 @@ final class AppCoordinator {
         self.dataService = dataService
     }
     
+    func restoreSession() async {
+        guard authService.rememberedCredentials() != nil else {
+            authService.signOut()
+            authState = .signedOut
+            return
+        }
+        
+        do {
+            _ = try await authService.restoreSession()
+            authState = .signedIn
+        } catch {
+            restoreErrorMessage = error.localizedDescription
+            authState = .signedOut
+        }
+    }
+    
     func makeSignInViewModel() -> SignInViewModel {
-        SignInViewModel(authService: authService) { [weak self] in
+        SignInViewModel(
+            authService: authService,
+            rememberedCredentials: authService.rememberedCredentials(),
+            initialErrorMessage: restoreErrorMessage
+        ) { [weak self] in
             self?.authState = .signedIn
         }
     }
@@ -48,7 +69,12 @@ final class AppCoordinator {
     func signOut() {
         authService.signOut()
         path = NavigationPath()
+        restoreErrorMessage = nil
         authState = .signedOut
+        
+        Task {
+            await dataService.clearCachedServers()
+        }
     }
 
     @ViewBuilder

@@ -11,24 +11,65 @@ final class AuthServiceImpl: AuthServiceProtocol {
 
     private let networkService: NetworkServiceProtocol
     private let tokenStorage: TokenStorageProtocol
+    private let credentialsStorage: CredentialsStorageProtocol
 
     init(
         networkService: NetworkServiceProtocol,
-        tokenStorage: TokenStorageProtocol
+        tokenStorage: TokenStorageProtocol,
+        credentialsStorage: CredentialsStorageProtocol
     ) {
         self.networkService = networkService
         self.tokenStorage = tokenStorage
+        self.credentialsStorage = credentialsStorage
     }
 
     func signIn(
         username: String,
-        password: String
+        password: String,
+        rememberMe: Bool
     ) async throws -> AuthToken {
         guard !username.isEmpty, !password.isEmpty else {
             throw AuthError.emptyCredentials
         }
 
-        let body = try JSONEncoder().encode(LoginRequest(username: username, password: password))
+        let credentials = Credentials(username: username, password: password)
+        let token = try await requestToken(for: credentials)
+
+        if rememberMe {
+            credentialsStorage.save(credentials)
+        } else {
+            credentialsStorage.clear()
+        }
+
+        return token
+    }
+
+    func rememberedCredentials() -> Credentials? {
+        credentialsStorage.loadCredentials()
+    }
+
+    func restoreSession() async throws -> AuthToken {
+        guard let credentials = credentialsStorage.loadCredentials() else {
+            throw AuthError.noRememberedCredentials
+        }
+
+        do {
+            return try await requestToken(for: credentials)
+        } catch AuthError.invalidCredentials {
+            credentialsStorage.clear()
+            throw AuthError.invalidCredentials
+        }
+    }
+
+    func signOut() {
+        tokenStorage.clear()
+        credentialsStorage.clear()
+    }
+
+    private func requestToken(for credentials: Credentials) async throws -> AuthToken {
+        let body = try JSONEncoder().encode(
+            LoginRequest(username: credentials.username, password: credentials.password)
+        )
         let endpoint = Endpoint(
             path: "tokens",
             method: .post,
@@ -47,14 +88,6 @@ final class AuthServiceImpl: AuthServiceProtocol {
         let token = AuthToken(token: response.token)
         tokenStorage.save(token)
         return token
-    }
-
-    func currentToken() -> AuthToken? {
-        tokenStorage.loadToken()
-    }
-
-    func signOut() {
-        tokenStorage.clear()
     }
 }
 

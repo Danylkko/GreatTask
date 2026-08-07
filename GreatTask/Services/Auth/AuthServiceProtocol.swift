@@ -8,8 +8,9 @@
 import Foundation
 
 protocol AuthServiceProtocol {
-    func signIn(username: String, password: String) async throws -> AuthToken
-    func currentToken() -> AuthToken?
+    func signIn(username: String, password: String, rememberMe: Bool) async throws -> AuthToken
+    func rememberedCredentials() -> Credentials?
+    func restoreSession() async throws -> AuthToken
     func signOut()
 }
 
@@ -20,6 +21,7 @@ struct AuthToken: Equatable {
 enum AuthError: LocalizedError {
     case emptyCredentials
     case invalidCredentials
+    case noRememberedCredentials
 
     var errorDescription: String? {
         switch self {
@@ -27,6 +29,8 @@ enum AuthError: LocalizedError {
             return "Enter a username and password."
         case .invalidCredentials:
             return "Login or password is wrong."
+        case .noRememberedCredentials:
+            return "No saved credentials."
         }
     }
 }
