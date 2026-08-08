@@ -13,7 +13,11 @@ struct ServersListView: View {
         static let distanceColumnWidth: CGFloat = 100
     }
     
-    @State var viewModel: ServersListViewModel
+    @State private var viewModel: ServersListViewModel
+
+    init(viewModel: ServersListViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         Group {
@@ -60,7 +64,7 @@ struct ServersListView: View {
 
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(Array(viewModel.sortedServers.enumerated()), id: \.offset) { _, server in
+                        ForEach(viewModel.sortedServers, id: \.self) { server in
                             row(for: server)
                             Divider()
                         }
@@ -73,8 +77,8 @@ struct ServersListView: View {
 
     private var header: some View {
         HStack(spacing: 0) {
-            sortButton(title: "SERVER", field: .name, alignment: .leading)
-            sortButton(title: "DISTANCE", field: .distance, alignment: .leading)
+            sortButton(title: "SERVER", field: .name)
+            sortButton(title: "DISTANCE", field: .distance)
 
             if viewModel.isRefreshing {
                 ProgressView()
@@ -98,19 +102,11 @@ struct ServersListView: View {
             .background(Color.red.opacity(0.08))
     }
 
-    private func sortButton(
-        title: String,
-        field: ServersListViewModel.SortField,
-        alignment: Alignment
-    ) -> some View {
+    private func sortButton(title: String, field: ServersListViewModel.SortField) -> some View {
         Button {
             viewModel.toggleSort(field)
         } label: {
             HStack(spacing: 4) {
-                if alignment == .trailing {
-                    Spacer(minLength: 0)
-                }
-
                 Text(title)
                     .font(.body)
 
@@ -118,20 +114,21 @@ struct ServersListView: View {
                     .renderingMode(.template)
                     .font(.caption2.bold())
 
-                if alignment == .leading {
-                    Spacer(minLength: 0)
-                }
+                Spacer(minLength: 0)
             }
         }
         .buttonStyle(.plain)
         .foregroundStyle(
             viewModel.sortField == field ? Color(.primaryLightActive) : Color(.primaryLightInactive)
         )
-        .frame(maxWidth: field == .distance ? Constants.distanceColumnWidth : .infinity, alignment: alignment)
+        .frame(
+            maxWidth: field == .distance ? Constants.distanceColumnWidth : .infinity,
+            alignment: .leading
+        )
     }
 
     private func row(for server: ServerModel) -> some View {
-        HStack {
+        HStack(spacing: 0) {
             Text(server.name)
                 .frame(maxWidth: .infinity, alignment: .leading)
             Text("\(server.distance) km")

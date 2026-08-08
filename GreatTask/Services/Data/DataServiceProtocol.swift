@@ -13,7 +13,7 @@ protocol DataServiceProtocol {
     func clearCachedServers() async
 }
 
-struct ServerModel: Codable {
+struct ServerModel: Decodable, Hashable {
     let name: String
     let distance: Int
 }

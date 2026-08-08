@@ -27,7 +27,7 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
     }
 
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
-        let (data, _) = try await execute(endpoint)
+        let data = try await execute(endpoint)
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
@@ -39,7 +39,7 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
         _ = try await execute(endpoint)
     }
 
-    private func execute(_ endpoint: Endpoint) async throws -> (Data, HTTPURLResponse) {
+    private func execute(_ endpoint: Endpoint) async throws -> Data {
         guard var components = URLComponents(
             url: baseURL.appendingPathComponent(endpoint.path),
             resolvingAgainstBaseURL: false
@@ -82,7 +82,7 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
         let body = data.isEmpty ? nil : data
         switch httpResponse.statusCode {
         case 200..<300:
-            return (data, httpResponse)
+            return data
         case 401:
             throw NetworkError.unauthorized(body: body)
         case 403:
@@ -97,5 +97,4 @@ final class NetworkServiceImpl: NetworkServiceProtocol {
             throw NetworkError.unexpectedStatus(code: httpResponse.statusCode, body: body)
         }
     }
-    
 }

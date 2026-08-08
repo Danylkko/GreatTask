@@ -23,7 +23,6 @@ final class AppCoordinator {
     var path = NavigationPath()
     var authState: AuthState = .checking
     private(set) var signOutTask: Task<Void, Never>?
-    private var servers: [ServerModel] = []
     private var restoreErrorMessage: String?
     
     private let authService: AuthServiceProtocol
