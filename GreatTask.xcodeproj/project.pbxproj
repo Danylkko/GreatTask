@@ -6,7 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		79666B7C30279EC700373C7B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79F2153E3024C902005695CA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 79F215453024C902005695CA;
+			remoteInfo = GreatTask;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		79666B7830279EC700373C7B /* GreatTaskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GreatTaskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		79F215463024C902005695CA /* GreatTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreatTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -21,6 +32,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		79666B7930279EC700373C7B /* GreatTaskTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GreatTaskTests;
+			sourceTree = "<group>";
+		};
 		79F215483024C902005695CA /* GreatTask */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -32,6 +48,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		79666B7530279EC700373C7B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79F215433024C902005695CA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				79F215483024C902005695CA /* GreatTask */,
+				79666B7930279EC700373C7B /* GreatTaskTests */,
 				79F215473024C902005695CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				79F215463024C902005695CA /* GreatTask.app */,
+				79666B7830279EC700373C7B /* GreatTaskTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +86,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		79666B7730279EC700373C7B /* GreatTaskTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79666B8030279EC700373C7B /* Build configuration list for PBXNativeTarget "GreatTaskTests" */;
+			buildPhases = (
+				79666B7430279EC700373C7B /* Sources */,
+				79666B7530279EC700373C7B /* Frameworks */,
+				79666B7630279EC700373C7B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				79666B7D30279EC700373C7B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				79666B7930279EC700373C7B /* GreatTaskTests */,
+			);
+			name = GreatTaskTests;
+			packageProductDependencies = (
+			);
+			productName = GreatTaskTests;
+			productReference = 79666B7830279EC700373C7B /* GreatTaskTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		79F215453024C902005695CA /* GreatTask */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 79F215513024C902005695CA /* Build configuration list for PBXNativeTarget "GreatTask" */;
@@ -93,6 +141,10 @@
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					79666B7730279EC700373C7B = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 79F215453024C902005695CA;
+					};
 					79F215453024C902005695CA = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -113,11 +165,19 @@
 			projectRoot = "";
 			targets = (
 				79F215453024C902005695CA /* GreatTask */,
+				79666B7730279EC700373C7B /* GreatTaskTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		79666B7630279EC700373C7B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79F215443024C902005695CA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +188,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		79666B7430279EC700373C7B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		79F215423024C902005695CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +204,55 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		79666B7D30279EC700373C7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 79F215453024C902005695CA /* GreatTask */;
+			targetProxy = 79666B7C30279EC700373C7B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		79666B7E30279EC700373C7B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5PL9J82978;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.edu.ukma.GreatTaskTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreatTask.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreatTask";
+			};
+			name = Debug;
+		};
+		79666B7F30279EC700373C7B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5PL9J82978;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.edu.ukma.GreatTaskTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GreatTask.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GreatTask";
+			};
+			name = Release;
+		};
 		79F2154F3024C902005695CA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 79F215483024C902005695CA /* GreatTask */;
@@ -351,6 +466,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		79666B8030279EC700373C7B /* Build configuration list for PBXNativeTarget "GreatTaskTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79666B7E30279EC700373C7B /* Debug */,
+				79666B7F30279EC700373C7B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		79F215413024C902005695CA /* Build configuration list for PBXProject "GreatTask" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
